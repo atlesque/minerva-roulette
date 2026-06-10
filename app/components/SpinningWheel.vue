@@ -63,10 +63,11 @@ watch(spinComplete, (done) => {
 }
 
 .spin-hint {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  font-weight: 300;
+  color: #fff;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
 }
 </style>

@@ -7,7 +7,7 @@ const SPIN_DURATION = 5000
 
 const SEGMENT_COLORS = [
   { bg: '#E63946', text: '#FFFFFF' }, // Kris – crimson
-  { bg: '#FFD700', text: '#1A1A2E' }, // Gilles – gold
+  { bg: '#FFD700', text: '#FFFFFF' }, // Gilles – gold
   { bg: '#4895EF', text: '#FFFFFF' }, // Tom – sky blue
   { bg: '#2DC653', text: '#FFFFFF' }, // Alex – emerald
 ]
@@ -85,9 +85,9 @@ function drawWheel(ctx: CanvasRenderingContext2D, rotation: number) {
     ctx.textAlign = 'right'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = text
-    ctx.font = 'bold 26px "Poppins", system-ui, sans-serif'
-    ctx.shadowColor = 'rgba(0,0,0,0.4)'
-    ctx.shadowBlur = 4
+    ctx.font = 'bold 30px "Poppins", system-ui, sans-serif'
+    ctx.shadowColor = 'rgba(0,0,0,0.7)'
+    ctx.shadowBlur = 8
     ctx.fillText(NAMES[i], WHEEL_RADIUS - 18, 0)
     ctx.shadowBlur = 0
     ctx.restore()

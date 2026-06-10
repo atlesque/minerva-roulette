@@ -25,29 +25,31 @@ defineProps<{ winnerName: string }>()
 }
 
 .prefix {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
-  font-weight: 300;
+  color: #fff;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
 }
 
 .winner-name {
-  color: #ffd700;
-  font-size: clamp(4rem, 16vw, 9rem);
+  color: #fff;
+  font-size: clamp(4.6rem, 18vw, 10.5rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.02em;
   text-shadow:
-    0 0 40px rgba(255, 215, 0, 0.5),
-    0 4px 12px rgba(0, 0, 0, 0.6);
+    0 0 24px rgba(255, 255, 255, 0.35),
+    0 6px 20px rgba(0, 0, 0, 0.8);
 }
 
 .suffix {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: clamp(0.75rem, 2vw, 1rem);
-  font-weight: 300;
+  color: #fff;
+  font-size: clamp(0.95rem, 2.3vw, 1.2rem);
+  font-weight: 500;
   letter-spacing: 0.1em;
   margin-top: 16px;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
 }
 </style>
