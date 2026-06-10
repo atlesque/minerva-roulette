@@ -4,7 +4,8 @@ import { onMounted, onUnmounted, ref } from 'vue'
 defineProps<{ winnerName: string }>()
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
-let animationId = 0
+const animationId = ref(0)
+let cleanupResize: (() => void) | null = null
 
 interface Particle {
   x: number
@@ -27,7 +28,7 @@ function createParticles(count: number, canvasWidth: number): Particle[] {
     y: -10 - Math.random() * 100,
     vx: (Math.random() - 0.5) * 3,
     vy: 2 + Math.random() * 4,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)]!,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)] as string,
     width: 6 + Math.random() * 8,
     height: 10 + Math.random() * 6,
     angle: Math.random() * Math.PI * 2,
@@ -48,6 +49,7 @@ onMounted(() => {
   }
   resize()
   window.addEventListener('resize', resize)
+  cleanupResize = () => window.removeEventListener('resize', resize)
 
   const particles: Particle[] = createParticles(180, canvas.width)
 
@@ -75,15 +77,15 @@ onMounted(() => {
       }
     }
 
-    animationId = requestAnimationFrame(draw)
+    animationId.value = requestAnimationFrame(draw)
   }
 
   draw()
+})
 
-  onUnmounted(() => {
-    cancelAnimationFrame(animationId)
-    window.removeEventListener('resize', resize)
-  })
+onUnmounted(() => {
+  cancelAnimationFrame(animationId.value)
+  cleanupResize?.()
 })
 </script>
 
