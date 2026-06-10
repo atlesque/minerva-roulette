@@ -26,6 +26,7 @@ defineProps<{ winnerName: string }>()
 
 .prefix {
   color: #fff;
+  -webkit-text-fill-color: #fff;
   font-size: clamp(1.1rem, 3vw, 1.5rem);
   font-weight: 500;
   letter-spacing: 0.15em;
@@ -35,6 +36,7 @@ defineProps<{ winnerName: string }>()
 
 .winner-name {
   color: #fff;
+  -webkit-text-fill-color: #fff;
   font-size: clamp(4.6rem, 18vw, 10.5rem);
   font-weight: 900;
   line-height: 1;
@@ -46,6 +48,7 @@ defineProps<{ winnerName: string }>()
 
 .suffix {
   color: #fff;
+  -webkit-text-fill-color: #fff;
   font-size: clamp(0.95rem, 2.3vw, 1.2rem);
   font-weight: 500;
   letter-spacing: 0.1em;
