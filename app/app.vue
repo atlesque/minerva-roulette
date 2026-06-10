@@ -1,20 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useWinner } from '~/composables/useWinner'
 
-const { winnerIndex, winnerName } = useWinner()
-const spinComplete = ref(false)
+const { winnerIndex } = useWinner()
 </script>
 
 <template>
   <div class="carnival-app">
     <div class="confetti-bg" aria-hidden="true" />
-    <Transition name="wheel">
-      <SpinningWheel v-if="!spinComplete" :winner-index="winnerIndex" @spin-complete="spinComplete = true" />
-    </Transition>
-    <Transition name="winner">
-      <WinnerReveal v-if="spinComplete" :winner-name="winnerName" />
-    </Transition>
+    <SpinningWheel :winner-index="winnerIndex" />
   </div>
 </template>
 
@@ -75,26 +68,5 @@ body {
   background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 40%, rgba(0,0,0,0.6) 100%);
   pointer-events: none;
   z-index: 0;
-}
-
-/* ── Transitions ──────────────────────────────────────────────────────────── */
-.wheel-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.wheel-leave-to {
-  opacity: 0;
-  transform: scale(0.85);
-}
-
-.winner-enter-active {
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.winner-enter-from {
-  opacity: 0;
-  transform: translateY(24px) scale(0.97);
-}
-.winner-enter-to {
-  opacity: 1;
-  transform: translateY(0) scale(1);
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { ref, watch, onUnmounted, nextTick } from 'vue'
 import { useWheelCanvas, WHEEL_SIZE } from '~/composables/useWheelCanvas'
 
 const props = defineProps<{ winnerIndex: number }>()
@@ -9,6 +9,84 @@ const { canvasRef, spinComplete } = useWheelCanvas(props.winnerIndex)
 
 watch(spinComplete, (done) => {
   if (done) emit('spinComplete')
+})
+
+// ── Confetti ──────────────────────────────────────────────────────────────────
+
+const confettiRef = ref<HTMLCanvasElement | null>(null)
+const animationId = ref(0)
+let cleanupResize: (() => void) | null = null
+
+const COLORS = ['#E63946', '#FFD700', '#4895EF', '#2DC653', '#FF8C00', '#DA70D6', '#FF69B4', '#00CED1']
+
+interface Particle {
+  x: number; y: number; vx: number; vy: number
+  color: string; width: number; height: number
+  angle: number; angularVelocity: number; opacity: number
+}
+
+function createParticles(count: number, w: number): Particle[] {
+  return Array.from({ length: count }, () => ({
+    x: Math.random() * w,
+    y: -10 - Math.random() * 100,
+    vx: (Math.random() - 0.5) * 3,
+    vy: 2 + Math.random() * 4,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)] as string,
+    width: 6 + Math.random() * 8,
+    height: 10 + Math.random() * 6,
+    angle: Math.random() * Math.PI * 2,
+    angularVelocity: (Math.random() - 0.5) * 0.2,
+    opacity: 0.85 + Math.random() * 0.15,
+  }))
+}
+
+watch(spinComplete, async (done) => {
+  if (!done) return
+  await nextTick()
+  const canvas = confettiRef.value
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+
+  const resize = () => {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+  }
+  resize()
+  window.addEventListener('resize', resize)
+  cleanupResize = () => window.removeEventListener('resize', resize)
+
+  const particles = createParticles(180, canvas.width)
+
+  const draw = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    for (const p of particles) {
+      ctx.save()
+      ctx.globalAlpha = p.opacity
+      ctx.translate(p.x + p.width / 2, p.y + p.height / 2)
+      ctx.rotate(p.angle)
+      ctx.fillStyle = p.color
+      ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height)
+      ctx.restore()
+      p.x += p.vx
+      p.y += p.vy
+      p.angle += p.angularVelocity
+      p.vx += (Math.random() - 0.5) * 0.1
+      if (p.y > canvas.height + 20) {
+        p.y = -20
+        p.x = Math.random() * canvas.width
+        p.vy = 2 + Math.random() * 4
+      }
+    }
+    animationId.value = requestAnimationFrame(draw)
+  }
+
+  draw()
+})
+
+onUnmounted(() => {
+  cancelAnimationFrame(animationId.value)
+  cleanupResize?.()
 })
 </script>
 
@@ -23,7 +101,7 @@ watch(spinComplete, (done) => {
       </div>
       <canvas ref="canvasRef" :width="WHEEL_SIZE" :height="WHEEL_SIZE" class="wheel-canvas" />
     </div>
-    <p class="spin-hint">✨ Spinning… ✨</p>
+    <canvas v-if="spinComplete" ref="confettiRef" class="confetti-canvas" aria-hidden="true" />
   </div>
 </template>
 
@@ -62,12 +140,13 @@ watch(spinComplete, (done) => {
   filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.7));
 }
 
-.spin-hint {
-  color: #fff;
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+  z-index: 10;
 }
 </style>
