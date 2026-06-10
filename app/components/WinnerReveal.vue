@@ -118,11 +118,12 @@ onUnmounted(() => {
   height: 100%;
   pointer-events: none;
   z-index: 0;
+  background: transparent;
 }
 
 .winner-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
