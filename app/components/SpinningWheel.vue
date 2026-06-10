@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted, nextTick } from 'vue'
 import { useWheelCanvas, WHEEL_SIZE } from '~/composables/useWheelCanvas'
 
 const props = defineProps<{ winnerIndex: number }>()
@@ -40,8 +40,9 @@ function createParticles(count: number, w: number): Particle[] {
   }))
 }
 
-watch(spinComplete, (done) => {
+watch(spinComplete, async (done) => {
   if (!done) return
+  await nextTick()
   const canvas = confettiRef.value
   if (!canvas) return
   const ctx = canvas.getContext('2d')
