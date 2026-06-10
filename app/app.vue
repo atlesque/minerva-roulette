@@ -29,6 +29,7 @@ html, body {
 
 body {
   font-family: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #fff;
 }
 
 /* ── App shell ────────────────────────────────────────────────────────────── */
