@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { NAMES, useWinner } from './useWinner'
 
-/** Epoch date: 2026-06-11T07:30:00Z — first slot starts here */
-const EPOCH = new Date('2026-06-11T07:30:00Z')
+/** Epoch date: 2026-06-11T07:00:00Z — first slot starts here */
+const EPOCH = new Date('2026-06-11T07:00:00Z')
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
 
 describe('useWinner', () => {
