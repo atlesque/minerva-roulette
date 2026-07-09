@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { NAMES } from '~/composables/useWinner'
 
 export const WHEEL_SIZE = 420
@@ -9,6 +9,7 @@ const SEGMENT_COLORS = [
   { bg: '#E63946', text: '#FFFFFF' }, // Kris – crimson
   { bg: '#FFD700', text: '#FFFFFF' }, // Gilles – gold
   { bg: '#4895EF', text: '#FFFFFF' }, // Tom – sky blue
+  { bg: '#F77F00', text: '#FFFFFF' }, // Thijs – orange
   { bg: '#2DC653', text: '#FFFFFF' }, // Alex – emerald
 ]
 
@@ -19,14 +20,16 @@ function easeOutCubic(t: number): number {
 }
 
 // Segments are drawn starting from the top (angle = −π/2).
-// Segment i spans: [−π/2 + i·(π/2),  −π/2 + (i+1)·(π/2)]
-// Centre of segment i: −π/2 + i·(π/2) + π/4
+// Segment i spans: [−π/2 + i·arc,  −π/2 + (i+1)·arc]  where arc = 2π/n.
+// Centre of segment i: −π/2 + i·arc + arc/2
 //
 // For segment i's centre to land under the top pointer after rotation r:
 //   r = −π/2 − centre_i + k·2π  (k = 10 full spins)
-//   r = (3555 − i·90) degrees
 function getTargetRotation(index: number): number {
-  return (3555 - index * 90) * (Math.PI / 180)
+  const n = NAMES.length
+  const arcDeg = 360 / n
+  // 10 full spins (3600°) minus the segment centre offset, then minus index * arc
+  return (3600 - arcDeg / 2 - index * arcDeg) * (Math.PI / 180)
 }
 
 function drawWheel(ctx: CanvasRenderingContext2D, rotation: number) {
@@ -67,7 +70,7 @@ function drawWheel(ctx: CanvasRenderingContext2D, rotation: number) {
   for (let i = 0; i < n; i++) {
     const startAngle = -Math.PI / 2 + i * arc
     const endAngle = startAngle + arc
-    const { bg, text } = SEGMENT_COLORS[i]
+    const { bg, text } = SEGMENT_COLORS[i]!
 
     ctx.beginPath()
     ctx.moveTo(0, 0)
@@ -88,7 +91,7 @@ function drawWheel(ctx: CanvasRenderingContext2D, rotation: number) {
     ctx.font = 'bold 30px "Poppins", system-ui, sans-serif'
     ctx.shadowColor = 'rgba(0,0,0,0.7)'
     ctx.shadowBlur = 8
-    ctx.fillText(NAMES[i], WHEEL_RADIUS - 18, 0)
+    ctx.fillText(NAMES[i]!, WHEEL_RADIUS - 18, 0)
     ctx.shadowBlur = 0
     ctx.restore()
   }
