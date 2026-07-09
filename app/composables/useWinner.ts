@@ -1,4 +1,4 @@
-export const NAMES = ['Kris', 'Gilles', 'Tom', 'Alex'] as const
+export const NAMES = ['Kris', 'Gilles', 'Tom', 'Thijs', 'Alex'] as const
 
 /** 2026-06-11 09:00 CET (UTC+1) = 07:00 UTC */
 const EPOCH_MS = new Date('2026-06-11T07:00:00Z').getTime()
