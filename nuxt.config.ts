@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  devServer: { port: 8610 },
   app: {
     head: {
       title: 'MIN Ticket Roulette',
