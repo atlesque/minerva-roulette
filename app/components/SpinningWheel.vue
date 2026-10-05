@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onUnmounted, nextTick } from 'vue'
-import { useWheelCanvas, WHEEL_SIZE } from '~/composables/useWheelCanvas'
+import { useWheelCanvas } from '~/composables/useWheelCanvas'
 
 const props = defineProps<{ winnerIndex: number }>()
 const emit = defineEmits<{ spinComplete: [] }>()
@@ -93,13 +93,7 @@ onUnmounted(() => {
 <template>
   <div class="wheel-stage">
     <div class="wheel-wrapper">
-      <div class="pointer" aria-hidden="true">
-        <svg width="40" height="48" viewBox="0 0 40 48">
-          <polygon points="20,48 0,4 40,4" fill="#FFD700" />
-          <polygon points="20,48 0,4 40,4" fill="none" stroke="#B8860B" stroke-width="2" />
-        </svg>
-      </div>
-      <canvas ref="canvasRef" :width="WHEEL_SIZE" :height="WHEEL_SIZE" class="wheel-canvas" />
+      <canvas ref="canvasRef" class="wheel-canvas" />
     </div>
     <canvas v-if="spinComplete" ref="confettiRef" class="confetti-canvas" aria-hidden="true" />
   </div>
@@ -124,20 +118,12 @@ onUnmounted(() => {
   justify-content: center;
 }
 
-.pointer {
-  position: absolute;
-  top: -42px;
-  left: 50%;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
-  z-index: 2;
-}
-
 .wheel-canvas {
+  position: fixed;
+  inset: 0;
   display: block;
-  width: min(420px, 88vmin);
-  height: min(420px, 88vmin);
-  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.7));
+  width: 100%;
+  height: 100%;
 }
 
 .confetti-canvas {
